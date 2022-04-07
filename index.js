@@ -11,6 +11,7 @@
 // ==/UserScript==
 
 
+
 (function() {
     'use strict';
 
@@ -33,21 +34,18 @@
 
         const content = await (await fetch( url )).text()
 
-        const doc = parser.parseFromString( content , "text/html" )
-
-        return doc
+        return parser.parseFromString( content , "text/html" )
+ 
     }
 
     if ( is_list_page ) {
 
-
         const list = document.querySelector('#_listUl')
         const page_numbers = document.querySelector('.paginate')
 
-
-        const cur_page = search.get('page') ? Number.parseInt( search.get('page') ) : 1
+        const cur_page = Number.parseInt( search.get('page') ) ?? 1
     
-        const page_number_children =  Array.from( 
+        const page_number_children = Array.from( 
             page_numbers.children
         )   
 
@@ -63,7 +61,7 @@
                 if ( href.endsWith('#') )
                     continue
 
-                let doc = await load_html( href )
+                const doc = await load_html( href )
                 const chapters = doc.querySelector('#_listUl')
                 
                 for( const child of chapters.children ) {
@@ -81,7 +79,6 @@
         }
 
         load_page_in_order()
-
 
     }
 
